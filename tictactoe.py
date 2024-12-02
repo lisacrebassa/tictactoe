@@ -11,3 +11,11 @@ def display_board(board):
             print("-" * 9)
     print("\n")  # Add space 
 
+# Function to place a symbol
+def place_symbol(board, position, symbol):
+    if board[position - 1] == " ":  # Check if the box is empty
+        board[position - 1] = symbol
+        return True
+    else:
+        print("This box is already occupied. Try another one.")
+        return False
