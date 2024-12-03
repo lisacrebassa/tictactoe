@@ -41,6 +41,7 @@ def insertLetter(letter, position):
         insertLetter(letter, position)
         return
 
+# to check the winning conditions
 def checkWin():
     if (board[1] == board[2] and board[1] == board[3] and board[1] != ' '):
         return True
@@ -60,6 +61,8 @@ def checkWin():
         return True
     else:
         return False
+    
+# to check the draw conditions
 def checkDraw():
     for key in board.keys():
         if board[key] == ' ':
@@ -71,6 +74,7 @@ def playerMove() :
     insertLetter(player, position)
     return
 
+# computer/bot move
 def compMove() :
     position = int(input("enter a position for 'x' : "))
     insertLetter(computer, position)
