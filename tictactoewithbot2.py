@@ -1,56 +1,83 @@
-import enum
+# create the board 
+board = {1: ' ', 2: ' ', 3: ' ',
+         4: ' ', 5: ' ', 6: ' ',
+         7: ' ', 8: ' ', 9: ' ',}   
+player = 'o'
+computer = 'x'
 
-class Player(enum.Enum):
-    x = 1
-    o = 2
+def printBoard(board):
+    print(board[1] + "|" + board[2] + "|" + board[3])
+    print("-+-+-")
+    print(board[4] + "|" + board[5] + "|" + board[6])
+    print("-+-+-")
+    print(board[7] + "|" + board[8] + "|" + board[9])
+    print("\n")  
 
-    @property
-    def other(self):
-        return Player.x if self == Player.o else Player.o
-    
-import copy
-from .player import Player
+# helper to determine if a position is available or not
+def spaceIsFree(position):
+    if board[position] == ' ':
+        return True 
+    return False
 
-MARKER_TO_CHAR = {
-    None: '.',
-    Player.x: 'x',
-    Player.o: 'o',
-}
+#function to insert a letter x or o for the tic tac toe and its position
+def insertLetter(letter, position):
+    if spaceIsFree(position):
+        board[position] = letter
+        printBoard(board)
+        if checkDraw():
+            print("Draw!")
+            exit()
+        if checkWin():
+            if letter == 'x':
+                print("Bot wins!")
+                exit()
+            else:
+                print("Player wins!")
+                exit()
+        return 
+    else:
+        print("Invalid position")
+        position = int(input("please enter a new position: "))
+        insertLetter(letter, position)
+        return
 
-class Board():
-    def __init__(self):
-        self.dimension = 3
-        self.grid = [[ None for y in range (self.dimension)]for x in range (self.dimension)]
-        self.moves = []
+def checkWin():
+    if (board[1] == board[2] and board[1] == board[3] and board[1] != ' '):
+        return True
+    elif (board[4] == board[5] and board[4] == board[6] and board[4] != ' '): 
+        return True
+    elif (board[7] == board[8] and board[7] == board[9] and board[7] != ' '):
+        return True
+    elif (board[1] == board[4] and board[1] == board[7] and board[1] != ' '):
+        return True
+    elif (board[2] == board[5] and board[2] == board[8] and board[2] != ' '):
+        return True
+    elif (board[3] == board[6] and board[3] == board[9] and board[3] != ' '):
+        return True
+    elif (board[1] == board[5] and board[1] == board[9] and board[1] != ' '):
+        return True
+    elif (board[7] == board[5] and board[7] == board[3] and board[7] != ' '):
+        return True
+    else:
+        return False
+def checkDraw():
+    for key in board.keys():
+        if board[key] == ' ':
+            return False
+    return True
 
-    def print(self):
-        print()
-        for row in range (self.dimension):
-            line = []
-            for col in range(self.dimension):
-                line.append(MARKER_TO_CHAR[self.grid[row][col]])
-            print('%s' % (''.join(line)))
+def playerMove() :
+    position = int(input("Enter a position for 'o': "))
+    insertLetter(player, position)
+    return
 
-def has_winner(self):
-    #need at least 5 moves before x hits three in a row
-    if (len(self.moves) <5):
-       return None
-    
-    #check rows for win
-    for row in range(self.dimension):
-        unique_rows = set(self.grid[row])
-        if (len(unique_rows) == 1):
-            value = unique_rows.pop()
-            if (value != None):
-                return value
-            
-    # check columns for win
-    for col in range(self.dimension):
-        unique_cols = set()
-        for row in range(self.dimension):
-            unique_cols.add(self.grid[row][col])
+def compMove() :
+    position = int(input("enter a position for 'x' : "))
+    insertLetter(computer, position)
+    return
 
-        if (len(unique_cols) == 1):
-            value = unique_cols.pop()
-            if (value != None):
-                return value
+
+# game loop
+while not checkWin():
+    compMove()
+    playerMove()
